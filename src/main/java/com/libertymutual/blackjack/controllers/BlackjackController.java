@@ -1,10 +1,11 @@
 package com.libertymutual.blackjack.controllers;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+
 
 import com.libertymutual.blackjack.models.Card;
 import com.libertymutual.blackjack.models.Dealer;
@@ -19,6 +20,7 @@ public class BlackjackController {
 		private Deck runningDeck;
 		private Dealer dealer;
 		private Gambler gambler;
+		private int currentBet;
 		
 	public BlackjackController() {
 
@@ -29,15 +31,25 @@ public class BlackjackController {
 	}
 
 	@GetMapping("")
-	public ModelAndView displayBlackjackForm() {
-		Hand hand = new Hand();
-		ModelAndView mv = new ModelAndView("blackjack/default");
-		mv.addObject("hand", hand);
-		return mv;
+	public String displayBlackjackForm(Model model) {
+		if (gambler.isBust()) {
+			currentBet = 0;
+		}
+		Hand dealerHand = dealer.getHand();
+		Hand gamblerHand = gambler.getHand();
+		model.addAttribute("dealerHand", dealerHand);
+		model.addAttribute("gamblerHand", gamblerHand);
+		model.addAttribute("currentBet", currentBet);
+		model.addAttribute("betState", currentBet == 0 && gambler.getAvailableCash() > 0);
+		model.addAttribute("roundState", currentBet != 0 && dealer.getNumberofCardsLeft() > 0);
+		return "blackjack/default";
+		
 	}
 
 	@PostMapping("bet")
-	public String bet() {
+	public String bet(int bet) {
+		currentBet = gambler.ante(bet);
+		runningDeck.shuffle();
 		Card cardToDeal = runningDeck.getCard();
 		gambler.giveCard(cardToDeal);
 		cardToDeal = runningDeck.getCard();
@@ -49,6 +61,38 @@ public class BlackjackController {
 		
 		return "redirect:/blackjack";
 	
-}
-
+	}
+	
+	@PostMapping ("hit") 
+	public String hit() {
+		
+		Card cardToDeal = runningDeck.getCard();
+		gambler.giveCard(cardToDeal);
+		cardToDeal = runningDeck.getCard();
+		
+		return "redirect:/blackjack";
+	}
+	
+	@PostMapping ("stand") 
+	public String stand() {
+		dealer.finishHitting(runningDeck);
+		if (dealer.isBust()) {
+			gambler.payout(currentBet * 2);
+		} else if (gambler.hasBlackjack() && !dealer.hasBlackjack()) {
+			gambler.payout(currentBet = currentBet / 2);
+		} else if (gambler.getBestScore() > dealer.getBestScore()) {
+			gambler.payout(currentBet * 2);
+		}
+		
+		currentBet = 0;
+		return "redirect:/blackjack";
+		
+	}
+	
+	@PostMapping ("nexthand")
+	public String nextHand() {
+		dealer = new Dealer();
+		gambler = new Gambler();
+		return "blackjack/default";		
+	}
 }

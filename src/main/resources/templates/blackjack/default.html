@@ -3,24 +3,41 @@
 
 	<head>
 		<title>BlackJack!</title>
+			<link rel="stylesheet"
+			href="/css/styles.css">
 	</head>
 	<body>
 	
-	{{#hand.values}}
+	<h2> Dealer's Hand </h2>
+	{{ #dealerHand.values }}
 	<div> Value: {{ . }}</div>
-	{{/hand.values}}
+	{{ /dealerHand.values }}
+	{{#dealerHand.cards}}
+	<div>{{ visualRepresentation }} of {{ suit }} </div>
+	{{/dealerHand.cards}}	
+	
 	<hr>
-	{{#hand.cards}}
-	<div>{{ suit }} of {{ visualRepresentation}} </div>
-	{{/hand.cards}}
 	
+	<h2> Gambler's Hand </h2>
+	{{ #gamblerHand.values }}
+	<div> Value: {{ . }}</div>
+	{{ /gamblerHand.values }}
+	{{ #gamblerHand.cards }}
+	<div>{{ visualRepresentation }} of {{ suit }} </div>
+	{{/gamblerHand.cards}}	
 	
-	<form method="post" action="/blackjack/deal">
+	<hr>
+	<br>
+	{{ #deck.getNumberofCardsLeft }}
+	<h3>Remaining Card Count: {{ . }}</h3>
+	{{ /deck.getNumberofCardsLeft }}
+	
+		<form method="post" action="/blackjack/nexthand">
             <button>Deal</button>
         </form>
         
         <form method="post" action="/blackjack/bet">
-            <input autofocus type="number" step="any" name="enteredValue">    
+            <input autofocus type="number" step="any" name="ante">    
             <button>Bet</button>
         </form>
         
@@ -29,11 +46,7 @@
         </form>
         
         <form method="post" action="/blackjack/stand">
-            <button>Stand</button>
-        </form>
-        
-        <form method="post" action="/blackjack/rules">
-            <button>Rules</button>    
+            <button>Stand</button>        
         </form>
         
 	</body>

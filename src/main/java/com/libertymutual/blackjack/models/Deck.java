@@ -1,6 +1,5 @@
 package com.libertymutual.blackjack.models;
 
-
 public class Deck {
 
 	private Card[] cards;
@@ -86,7 +85,9 @@ public class Deck {
 				cards[overallIndex] = cardToMove;
 				overallIndex += 1;
 			}
-
 		}
+	}
+	public int getNumberofCardsLeft() {
+		return cards.length - currentCardindex;		
 	}
 }
