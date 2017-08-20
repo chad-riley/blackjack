@@ -18,7 +18,6 @@ public class Dealer {
 	
 	public void finishHitting(Deck deck) {
 		int [] values = hand.getValues(); 
-		
 		while (values[0] < 17 || values[1] <17 ) {
 			Card theNextCard = deck.getCard();
 			hand.addCard(theNextCard);
@@ -38,13 +37,17 @@ public class Dealer {
 	}
 	
 	public boolean hasBlackjack() {
-		
-		return false;
+		int [] values = hand.getValues();
+		if 
 	}
 
 	public int getBestScore() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+	
+	public void clearHand() {
+		hand = new Hand();
 	}
 }
 	

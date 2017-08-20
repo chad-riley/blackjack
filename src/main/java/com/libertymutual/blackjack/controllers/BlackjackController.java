@@ -48,8 +48,10 @@ public class BlackjackController {
 
 	@PostMapping("bet")
 	public String bet(int bet) {
-		currentBet = gambler.ante(bet);
+//		currentBet = gambler.ante(bet);
 		runningDeck.shuffle();
+		gambler.clearHand();
+		dealer.clearHand();
 		Card cardToDeal = runningDeck.getCard();
 		gambler.giveCard(cardToDeal);
 		cardToDeal = runningDeck.getCard();

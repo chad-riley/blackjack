@@ -28,7 +28,7 @@ public class Gambler {
 		}
 
 		public int ante(int bet) {
-			// TODO Auto-generated method stub
+			
 			return bet;
 		}
 
@@ -38,12 +38,21 @@ public class Gambler {
 		}
 		
 		public boolean hasBlackjack() {
-			return false;
+			
+			int [] values = hand.getValues();
+			
+			if (cards.size() == 2 && (values[0] == 21 || values[1] == 21) );
+			
+			return true;
 		}
 
 		public int getBestScore() {
 			// TODO Auto-generated method stub
 			return 0;
+		}
+
+		public void clearHand() {
+			hand = new Hand();
 		}
 
 }
