@@ -1,54 +1,58 @@
 <!doctype html>
 <html>
-
 	<head>
 		<title>BlackJack!</title>
 			<link rel="stylesheet"
 			href="/css/styles.css">
 	</head>
 	<body>
-	
-	<h2> Dealer's Hand </h2>
-	{{ #dealerHand.values }}
-	<div> Value: {{ . }}</div>
-	{{ /dealerHand.values }}
-	{{#dealerHand.cards}}
-	<div>{{ visualRepresentation }} of {{ suit }} </div>
-	{{/dealerHand.cards}}	
-	
+		<div class = "table">
+			<div class = "Dealer's Hand">
+				<div>
+				{{ #dealer.cards }}
+				<span class = "card">
+				{{ visualRepresentation }}
+				{{ suit }}
+				</span>
+				{{ /dealer.cards }}
+				</div>	
+			</div>
+
 	<hr>
-	
-	<h2> Gambler's Hand </h2>
-	{{ #gamblerHand.values }}
-	<div> Value: {{ . }}</div>
-	{{ /gamblerHand.values }}
-	{{ #gamblerHand.cards }}
-	<div>{{ visualRepresentation }} of {{ suit }} </div>
-	{{/gamblerHand.cards}}	
-	
-	<hr>
-	<br>
-	{{ #deck.getNumberofCardsLeft }}
-	<h3>Remaining Card Count: {{ . }}</h3>
-	{{ /deck.getNumberofCardsLeft }}
-	
-		<form method="post" action="/blackjack/nexthand">
-            <button>Deal</button>
-        </form>
-        
-        <form method="post" action="/blackjack/bet">
-            <input autofocus type="number" step="any" name="ante">    
-            <button>Bet</button>
-        </form>
-        
-        <form method="post" action="/blackjack/hit">
-            <button>Hit</button>
-        </form>
-        
-        <form method="post" action="/blackjack/stand">
-            <button>Stand</button>        
-        </form>
-        
-	</body>
-	
+			<div class = "Gambler's Hand">
+				<div>
+				{{ #gambler.cards }}
+				<span class="card">
+				{{ visualRepresentation }}  
+				{{ suit }}
+				</span>
+				{{/gambler.cards}}	
+			</div>
+			{{ #roundState }}
+				<div>
+				Player bet: {{ currentBet }}
+				</div>
+				<div>
+				<form method="post" action="/blackjack/hit">
+            		<button>Hit</button>
+            	</form>
+            	<form method="post" action="/blackjack/stand">
+            		<button>Stand</button>        
+        		</form>
+				</div>
+			{{ /roundState }}
+			{{ #betState }}
+				<div>
+				<form method="post" action="/blackjack/bet">
+            		<input autofocus type="number" step="any" name="ante">    
+            			<button>Bet</button>
+			    </form>
+				</div>
+			{{ /betState }}
+		<div>
+			Player wallet: {{ gambler.playerMoney }}
+		</div>
+	</div>
+</div>
+</body>
 </html>

@@ -46,7 +46,7 @@ public class Hand {
 		} else if (values[1] < 21) {
 			return values[1];
 		}
-		return 0;
+		return values[0];
 	}
 	
 	
